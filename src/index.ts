@@ -12,7 +12,7 @@ export const WorkflowAgentsPlugin: Plugin = async (ctx) => {
     "install-deps": installDepsTool,
   };
 
-  // Handle /setup command
+  // Handle /setup command execution
   hooks["command.execute.before"] = async (input, output) => {
     const command = input.command.trim();
     if (command === "setup") {
@@ -29,6 +29,16 @@ export const WorkflowAgentsPlugin: Plugin = async (ctx) => {
   // Configure providers and models on startup
   hooks.config = async (config) => {
     await configureProviders(ctx, config);
+    
+    // Add /setup command
+    if (!config.command) {
+      config.command = {};
+    }
+    config.command["setup"] = {
+      template: "Run the setup to configure provider configuration and agent files in the .opencode/ folder.",
+      description: "Setup workflow agents configuration",
+      agent: "default",
+    };
   };
 
   // Install agent definitions on first run
