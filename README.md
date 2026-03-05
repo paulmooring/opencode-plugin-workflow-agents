@@ -8,6 +8,7 @@ A distributable OpenCode plugin that bundles custom agents, configures AI provid
 - **AI Provider Configuration**: Automatic registration of MiniMax and Bailian Coding Plan providers
 - **Dependency Installation Tool**: Auto-detect project type and install dependencies across multiple ecosystems
 - **MCP Server Support**: Configure context7, sequential-thinking, firecrawl, and mcp-server-docker with per-agent access control
+- **Local Setup Command**: Write provider config and agents to `.opencode/` folder for team sharing
 
 ## Installation
 
@@ -36,6 +37,29 @@ export MINIMAX_API_KEY="your-minimax-api-key"
 # For Bailian Coding Plan provider
 export BAILIAN_API_KEY="your-bailian-api-key"
 ```
+
+## Local Setup Command
+
+The plugin provides a `/setup` command that writes provider configuration and agent files to your project's `.opencode/` folder. This allows you to commit the configuration to git for team sharing.
+
+### Usage
+
+```bash
+/setup
+```
+
+### Output
+
+The command creates the following files in your project:
+
+- `.opencode/config.jsonc` - Provider and agent configuration
+- `.opencode/agents/` - Agent markdown files (default, research, spec, implement, review, debug, quality, security, documentation)
+
+### Team Sharing
+
+After running `/setup`, you can commit the `.opencode/` folder to your repository. Other users will have the same provider and agent configuration without needing to configure it manually.
+
+Note: API keys are written as environment variable references (e.g., `${process.env.MINIMAX_API_KEY}`) so each user needs their own API keys configured locally.
 
 ## Included Agents
 
