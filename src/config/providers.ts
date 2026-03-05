@@ -87,4 +87,74 @@ export async function configureProviders(ctx: PluginInput, config: any): Promise
   };
 
   config.default_agent = "default";
+
+  // Configure MCP servers
+  configureMcpServers(config);
+}
+
+function configureMcpServers(config: any): void {
+  config.mcp = config.mcp || {};
+
+  config.mcp["context7"] = {
+    type: "remote",
+    url: "https://mcp.context7.com/mcp",
+    headers: {
+      "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}",
+    },
+    enabled: false,
+  };
+
+  config.mcp["sequential-thinking"] = {
+    type: "local",
+    command: ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+    enabled: false,
+  };
+
+  config.mcp["firecrawl"] = {
+    type: "local",
+    command: ["npx", "-y", "@mcp-servers/firecrawl"],
+    enabled: false,
+  };
+
+  config.mcp["mcp-server-docker"] = {
+    type: "local",
+    command: ["npx", "-y", "@mcp-servers/docker"],
+    enabled: false,
+  };
+
+  config.tools = config.tools || {};
+  config.tools["context7_*"] = false;
+  config.tools["sequential-thinking_*"] = false;
+  config.tools["firecrawl_*"] = false;
+  config.tools["docker_*"] = false;
+
+  config.agent = config.agent || {};
+
+  const allAgents = ["research", "spec", "implement", "review", "debug", "quality", "security", "documentation"];
+  for (const agent of allAgents) {
+    config.agent[agent] = config.agent[agent] || {};
+    config.agent[agent].tools = config.agent[agent].tools || {};
+    config.agent[agent].tools["context7_*"] = true;
+  }
+
+  const sequentialThinkingAgents = ["research", "spec", "debug"];
+  for (const agent of sequentialThinkingAgents) {
+    config.agent[agent] = config.agent[agent] || {};
+    config.agent[agent].tools = config.agent[agent].tools || {};
+    config.agent[agent].tools["sequential-thinking_*"] = true;
+  }
+
+  const firecrawlAgents = ["research", "spec", "debug"];
+  for (const agent of firecrawlAgents) {
+    config.agent[agent] = config.agent[agent] || {};
+    config.agent[agent].tools = config.agent[agent].tools || {};
+    config.agent[agent].tools["firecrawl_*"] = true;
+  }
+
+  const dockerAgents = ["debug", "review"];
+  for (const agent of dockerAgents) {
+    config.agent[agent] = config.agent[agent] || {};
+    config.agent[agent].tools = config.agent[agent].tools || {};
+    config.agent[agent].tools["docker_*"] = true;
+  }
 }

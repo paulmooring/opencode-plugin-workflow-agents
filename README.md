@@ -7,6 +7,7 @@ A distributable OpenCode plugin that bundles custom agents, configures AI provid
 - **9 Pre-configured Agents**: Default (Architect), Research, Spec, Implement, Review, Debug, Quality, Security, and Documentation
 - **AI Provider Configuration**: Automatic registration of MiniMax and Bailian Coding Plan providers
 - **Dependency Installation Tool**: Auto-detect project type and install dependencies across multiple ecosystems
+- **MCP Server Support**: Configure context7, sequential-thinking, firecrawl, and mcp-server-docker with per-agent access control
 
 ## Installation
 
